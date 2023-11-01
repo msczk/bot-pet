@@ -61,6 +61,8 @@ client.once(Events.ClientReady, () => {
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
+	addDiscordUser(interaction.user.id);
+
 	const command = client.commands.get(interaction.commandName);
 
 	if (!command) return;
