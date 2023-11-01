@@ -1,10 +1,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
-const { token } = require('./config/config.json');
+const { token, clientId, pet_api_url } = require('./config/config.json');
 const axios = require('axios').default;
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildPresences]});
 
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
@@ -24,8 +24,38 @@ for (const folder of commandFolders) {
 	}
 }
 
-client.once(Events.ClientReady, () => {
+function addDiscordUser(id_discord_user)
+{
+	axios.post(pet_api_url+'discord-users', {
+		id_discord: id_discord_user,
+	  })
+	  .then(function (response) {
+		console.log(response);
+	  })
+	  .catch(function (error) {
+		console.log(error.response.data.message);
+	  });
+}
+
+function ClientReady()
+{
 	console.log('Ready!');
+	client.user.setActivity('beep boop I\'m a bot');
+
+	client.guilds.cache.forEach(guild => {
+		console.log(guild.name);
+
+		guild.members.cache.forEach(member => {
+			if(member.user.id != clientId)
+			{
+				addDiscordUser(member.user.id)
+			}
+		});
+	});
+}
+
+client.once(Events.ClientReady, () => {
+	ClientReady();	
 });
 
 client.on(Events.InteractionCreate, async interaction => {
