@@ -3,6 +3,33 @@ const axios = require('axios').default;
 const { pet_api_url } = require('../../config/config.json');
 const { codeBlock } = require('discord.js');
 
+const animals_emojis = {
+    "abeille" : '🐝',
+    "canard" : '🦆',
+    "chat" : '🐈',
+    "cheval" : '🐎',
+    "chevre" : '🐐',
+    "chien" : '🐕',
+    "cochon" : '🐖',
+    "cochon-dinde" : '🐹',
+    "dinde" : '🦃',
+    "furet" : '🐹',
+    "hamster" : '🐹',
+    "lapin" : '🐇',
+    "lezard" : '🦎',
+    "mouton" : '🐑',
+    "oiseau" : '🐦',
+    "poisson" : '🐟',
+    "poisson-rouge" : '🐟',
+    "poney" : '🐎',
+    "poule" : '🐔',
+    "rat" : '🐀',
+    "serpent" : '🐍',
+    "souris" : '🐁',
+    "tortue" : '🐢',
+    "vache" : '🐄'
+};
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('mypets')
@@ -51,5 +78,5 @@ function formatPetMessage(pet)
         }
     }
 
-    return pet.name+' (id: '+pet.slug+')'+'\n'+'Hunger : '+hunger+'\n'+'Amusement : '+amusement+'\n'+'Sleep : '+sleep;
+    return animals_emojis[pet.slug]+' '+pet.name+' (id: '+pet.slug+')'+'\n'+'Hunger : '+hunger+'\n'+'Amusement : '+amusement+'\n'+'Sleep : '+sleep;
 }
